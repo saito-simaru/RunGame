@@ -63,7 +63,7 @@ public class player : MonoBehaviour
         }
         else if (hit.collider.gameObject.tag == "stage")
         {
-            
+            Debug.Log("jumpok");
             isGrounded = true;
         }
 
