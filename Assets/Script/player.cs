@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
+    private int MaxJumpCount = 2;
+    private int jumpCount = 0;
     public float jumpForce = 500f; // ジャンプ力
     private Vector3 playerPosition;
     private RaycastHit2D hit;
@@ -20,10 +22,20 @@ public class player : MonoBehaviour
         playerPosition = gameObject.transform.position;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        Raymethod();
+        //Raymethod();
+        if (other.gameObject.CompareTag("stage"))
+        {
+            jumpCount = 0;
+            Debug.Log("JumpReset");
+        }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+	{
+        Debug.Log("dead");
+	}
 
     void OnCollisionExit2D(Collision2D other)
     {           
@@ -38,14 +50,16 @@ public class player : MonoBehaviour
     // PlayerInput の Behaviour が "Invoke Unity Events" の場合、このメソッドが呼び出されます。
     void OnJump()
     {
+        // ジャンプ操作
+        if (jumpCount < MaxJumpCount)
+        {// ジャンプ開始
 
-        if (isGrounded == true)
-        {
-            
+            //ジャンプ数をカウント
+            jumpCount++;
             //Impulseは瞬間的に力を加える
             rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse); // 上方向に力を加える
-            isGrounded = false;
-        }
+  
+		}
 
     }
 
@@ -60,11 +74,13 @@ public class player : MonoBehaviour
         if (hit.collider == null)
         {
             Debug.Log("null");
+
         }
         else if (hit.collider.gameObject.tag == "stage")
         {
             Debug.Log("jumpok");
             isGrounded = true;
+            jumpCount = 0;
         }
 
     }
