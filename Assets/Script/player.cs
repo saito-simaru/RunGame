@@ -6,7 +6,7 @@ public class player : MonoBehaviour
 {
     private int MaxJumpCount = 2;
     private int jumpCount = 0;
-    public float jumpForce = 500f; // ジャンプ力
+    public float jumpForce = 5f; // ジャンプ力
     private Vector3 playerPosition;
     private RaycastHit2D hit;
     public float rayLength;
@@ -57,7 +57,12 @@ public class player : MonoBehaviour
             //ジャンプ数をカウント
             jumpCount++;
             //Impulseは瞬間的に力を加える
-            rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse); // 上方向に力を加える
+            //rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse); // 上方向に力を加える
+
+
+			
+			// ジャンプ力を適用
+			rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
   
 		}
 
