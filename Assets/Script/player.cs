@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
+    public HPcontroller hpcon;
     private int MaxJumpCount = 2;
     private int jumpCount = 0;
+    [SerializeField]
+    private int hp = 3;
+    [SerializeField]
+    private float cooldownTime;
     public float jumpForce = 5f; // ジャンプ力
     private Vector3 playerPosition;
     private RaycastHit2D hit;
@@ -14,81 +19,68 @@ public class player : MonoBehaviour
     private bool isGrounded = false; // 地面に接触しているかどうかのフラグ
     public LayerMask targetLayer;
     private bool isGameOver = false;
-
+    private bool canDetect = true;
+    private Animator anim;
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerPosition = gameObject.transform.position;
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        //Raymethod();
         if (other.gameObject.CompareTag("stage"))
         {
             jumpCount = 0;
+            anim.SetBool("isJumping", false);
             Debug.Log("JumpReset");
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
-	{
-        Debug.Log("dead");
-	}
+    {
+        //canDetectがtrueじゃないと実行されない
+        if (!canDetect) return;
 
-    void OnCollisionExit2D(Collision2D other)
-    {           
-        isGrounded = false;
-        
+        if (other.gameObject.CompareTag("obstacles"))
+        {
+            Debug.Log("障害物に触れた！");
+            hp -= 1;
+            //障害物との接触判定OFF
+            canDetect = false;
+            //Invoke（関数名、関数を呼び出すまでの時間）
+            Invoke(nameof(ResetDetection), cooldownTime);
+
+            if (hp == 0)
+            {
+                Debug.Log("dead");
+                anim.SetBool("isDead", true);
+            }
+        }
     }
-    
 
+    private void ResetDetection()
+    {
+        //障害物との接触判定ON
+        canDetect = true;
+    }
 
-    // PlayerInputコンポーネントのイベントで呼び出されるメソッド
-    // アクションマップ名 + アクション名 をメソッド名にする（例: OnPlayerJump）
-    // PlayerInput の Behaviour が "Invoke Unity Events" の場合、このメソッドが呼び出されます。
     void OnJump()
     {
-        // ジャンプ操作
-        if (jumpCount < MaxJumpCount)
-        {// ジャンプ開始
-
+        if (jumpCount < MaxJumpCount && isGameOver == false)
+        {
             //ジャンプ数をカウント
             jumpCount++;
-            //Impulseは瞬間的に力を加える
-            //rb.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse); // 上方向に力を加える
-
-
-			
-			// ジャンプ力を適用
-			rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
-  
-		}
-
+            // ジャンプ力を適用
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            anim.SetBool("isJumping", true);
+        }
     }
 
-
-    private void Raymethod()
+    public int GetHP()
     {
-        playerPosition = gameObject.transform.position;
-        hit = Physics2D.Raycast(playerPosition, Vector3.down, rayLength, targetLayer);
-        //Debug.DrawRay(playerPosition, Vector3.down * rayLength, Color.red);
-        //Debug.Log("プレイヤーの下にオブジェクトがあります: " + hit.collider.gameObject.tag);
-
-        if (hit.collider == null)
-        {
-            Debug.Log("null");
-
-        }
-        else if (hit.collider.gameObject.tag == "stage")
-        {
-            Debug.Log("jumpok");
-            isGrounded = true;
-            jumpCount = 0;
-        }
-
+        return hp;
     }
-
 }
-
