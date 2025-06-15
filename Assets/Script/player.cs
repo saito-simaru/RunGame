@@ -5,6 +5,7 @@ using UnityEngine;
 public class player : MonoBehaviour
 {
     public HPcontroller hpcon;
+    public SpriteBlinker blinker;
     private int MaxJumpCount = 2;
     private int jumpCount = 0;
     [SerializeField]
@@ -48,16 +49,24 @@ public class player : MonoBehaviour
         {
             Debug.Log("障害物に触れた！");
             hp -= 1;
-            //障害物との接触判定OFF
-            canDetect = false;
-            //Invoke（関数名、関数を呼び出すまでの時間）
-            Invoke(nameof(ResetDetection), cooldownTime);
-
             if (hp == 0)
             {
                 Debug.Log("dead");
+                //ジャンプを不可にする
+                isGameOver = true;
                 anim.SetBool("isDead", true);
             }
+            else
+            {
+                //障害物との接触判定OFF
+                canDetect = false;
+                //Invoke（関数名、関数を呼び出すまでの時間）
+                Invoke(nameof(ResetDetection), cooldownTime);
+                //プレイヤーの点滅処理を別scriptで行う
+                blinker.StartBlinking(cooldownTime);
+            }
+
+
         }
     }
 
