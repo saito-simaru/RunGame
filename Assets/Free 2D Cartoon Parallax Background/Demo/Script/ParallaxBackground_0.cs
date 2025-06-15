@@ -20,7 +20,10 @@ public class ParallaxBackground_0 : MonoBehaviour
         _camera = Camera.main.transform;
         sizeX = Layer_Objects[0].transform.localScale.x;
         boundSizeX = Layer_Objects[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        for (int i=0;i<4;i++){
+        Debug.Log(sizeX);
+        Debug.Log(boundSizeX);
+        for (int i = 0; i < 4; i++)
+        {
             startPos[i] = _camera.position.x;
         }
     }
@@ -38,7 +41,7 @@ public class ParallaxBackground_0 : MonoBehaviour
             float movedistance = _camera.position.x  * Layer_Speed[i];
             //実際に移動量を代入して移動させる
             Layer_Objects[i].transform.position = new Vector2 (startPos[i] + movedistance, _camera.position.y);
-            if (_camera.position.x - 45 > Layer_Objects[i].transform.position.x){
+            if (temp > startPos[i] - boundSizeX*sizeX){
                 startPos[i] += boundSizeX*sizeX;
             }else if(temp < startPos[i] - boundSizeX*sizeX){
                 startPos[i] -= boundSizeX*sizeX;

@@ -8,14 +8,12 @@ public class BackgroundControl_0 : MonoBehaviour
     public int backgroundNum;
     public Sprite[] Layer_Sprites;
     private GameObject[] Layer_Object = new GameObject[4];
-    private int max_backgroundNum = 3;
+    private int max_backgroundNum = 1;
     void Start()
     {
         for (int i = 0; i < Layer_Object.Length; i++){
             Layer_Object[i] = GameObject.Find("Layer_" + i);
         }
-        
-        ChangeSprite();
     }
 
     void Update() {
@@ -25,12 +23,18 @@ public class BackgroundControl_0 : MonoBehaviour
     }
 
     void ChangeSprite(){
-        Layer_Object[0].GetComponent<SpriteRenderer>().sprite = Layer_Sprites[backgroundNum*5];
-        for (int i = 1; i < Layer_Object.Length; i++){
-            Sprite changeSprite = Layer_Sprites[backgroundNum*5 + i];
+        //一番奥の背景を変更
+        //[backgroundNum * 5]は各セットの先頭レイヤーをとってくるため
+        //Layer_Object[0].GetComponent<SpriteRenderer>().sprite = Layer_Sprites[backgroundNum*4];
+        //それ以外の背景を変更
+        for (int i = 0; i < Layer_Object.Length; i++)
+        {
+            Sprite changeSprite = Layer_Sprites[backgroundNum * 4 + i];
             //Change Layer_1->7
+            //親背景の変更
             Layer_Object[i].GetComponent<SpriteRenderer>().sprite = changeSprite;
             //Change "Layer_(*)x" sprites in children of Layer_1->7
+            //子背景の変更
             Layer_Object[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = changeSprite;
             Layer_Object[i].transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = changeSprite;
         }
