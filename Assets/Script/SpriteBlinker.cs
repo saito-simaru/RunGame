@@ -11,6 +11,7 @@ public class SpriteBlinker : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
+    
 
     public void StartBlinking(float duration)
     {
@@ -35,6 +36,6 @@ public class SpriteBlinker : MonoBehaviour
         isBlinking = false;
         Debug.Log("点滅終了");
 
-        
+
     }
 }

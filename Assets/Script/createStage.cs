@@ -76,9 +76,6 @@ public class createStage : MonoBehaviour
         {
             DeleteStage();
         }
-
-        //横スクロール
-        camera.transform.position += new Vector3(moveSpeed * Time.deltaTime, 0f, 0f);
     }
 
     void ChangeLevel()

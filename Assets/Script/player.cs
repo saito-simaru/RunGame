@@ -12,6 +12,7 @@ public class player : MonoBehaviour
     private int hp = 3;
     [SerializeField]
     private float cooldownTime;
+    public float movespeed = 1f;
     public float jumpForce = 5f; // ジャンプ力
     private Vector3 playerPosition;
     private RaycastHit2D hit;
@@ -22,7 +23,7 @@ public class player : MonoBehaviour
     private bool isGameOver = false;
     private bool canDetect = true;
     private Animator anim;
-
+    private Vector3 playerpos;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -30,6 +31,16 @@ public class player : MonoBehaviour
         playerPosition = gameObject.transform.position;
         //別scriptでhpの数だけhpアイコンを作成
         hpcon.createHPIcon(hp);
+    }
+
+    void Update()
+    {
+        //横スクロール
+        //rb.velocity = new Vector2(movespeed * Time.deltaTime, rb.velocity.y); // X方向に移動、Yはそのまま
+        if (isGameOver == false)
+        {
+            gameObject.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -45,6 +56,11 @@ public class player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //canDetectがtrueじゃないと実行されない
+        if (other.gameObject.CompareTag("deadobj"))
+        {
+            GameOver();
+        }
+
         if (!canDetect) return;
 
         if (other.gameObject.CompareTag("obstacles"))
@@ -52,14 +68,12 @@ public class player : MonoBehaviour
             Debug.Log("障害物に触れた！");
             hp -= 1;
             hpcon.showHPIcon(hp);
+            
             if (hp == 0)
             {
-                Debug.Log("dead");
-                //ジャンプを不可にする
-                isGameOver = true;
-                anim.SetBool("isDead", true);
+                GameOver();
             }
-            else if(isGameOver == false)
+            else if (isGameOver == false)
             {
                 //障害物との接触判定OFF
                 canDetect = false;
@@ -68,9 +82,17 @@ public class player : MonoBehaviour
                 //プレイヤーの点滅処理を別scriptで行う
                 blinker.StartBlinking(cooldownTime);
             }
-
-
         }
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("dead");
+        
+        hp = 0;
+        hpcon.showHPIcon(hp);
+        isGameOver = true;
+        anim.SetBool("isDead", true);
     }
 
     private void ResetDetection()
@@ -89,10 +111,5 @@ public class player : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             anim.SetBool("isJumping", true);
         }
-    }
-
-    public int GetHP()
-    {
-        return hp;
     }
 }
