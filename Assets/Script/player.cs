@@ -8,11 +8,13 @@ public class player : MonoBehaviour
     public SpriteBlinker blinker;
     private int MaxJumpCount = 2;
     private int jumpCount = 0;
+    private int countStar = 0;
     [SerializeField]
     private int hp = 3;
     [SerializeField]
     private float cooldownTime;
     public float movespeed = 1f;
+    private float defaultMovespeed;
     public float jumpForce = 5f; // ジャンプ力
     private Vector3 playerPosition;
     private RaycastHit2D hit;
@@ -29,6 +31,7 @@ public class player : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerPosition = gameObject.transform.position;
+        defaultMovespeed = movespeed;
         //別scriptでhpの数だけhpアイコンを作成
         hpcon.createHPIcon(hp);
     }
@@ -55,20 +58,31 @@ public class player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //canDetectがtrueじゃないと実行されない
+        
+
+        //奈落へ落ちた場合
         if (other.gameObject.CompareTag("deadobj"))
         {
             GameOver();
         }
+        //スターに触れた場合
+        if (other.gameObject.CompareTag("star"))
+        {
+            movespeed += 0.5f;
+            Destroy(other.gameObject);
+        }
 
+        //canDetect（接触可能フラグ）がtrueじゃないと実行されない
         if (!canDetect) return;
-
+        
+        //障害物に当たった場合
         if (other.gameObject.CompareTag("obstacles"))
         {
             Debug.Log("障害物に触れた！");
             hp -= 1;
+            movespeed = defaultMovespeed;
             hpcon.showHPIcon(hp);
-            
+
             if (hp == 0)
             {
                 GameOver();

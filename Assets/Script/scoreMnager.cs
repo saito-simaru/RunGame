@@ -8,7 +8,7 @@ public class scoreManagement : MonoBehaviour
     public TextMeshProUGUI currentScoreText;
     public TextMeshProUGUI endScoreText;
     public TextMeshProUGUI highScoreText;
-    public  player player;
+    public  GameObject player;
     public createStage setStage;
     public Canvas gameUI;
     public Canvas result;
@@ -25,7 +25,7 @@ public class scoreManagement : MonoBehaviour
 
     void Update()
     {
-        currentScore = (int)Camera.main.transform.position.x;
+        currentScore = (int)player.transform.position.x;
         //カメラの座標がそのままスコア  F0で小数点なし
         currentScoreText.text = "Score:" + currentScore.ToString("F0");
     }
@@ -34,7 +34,6 @@ public class scoreManagement : MonoBehaviour
     // public void SetResult()
     // {
     //     Debug.Log("startResult");
-    //     player.enabled = false;
     //     setStage.enabled = false;
     //     SaveScore(currentScore);
     //     gameUI.enabled = false;  

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - sttage
   - stage
+  - obstacles
+  - deadobj
+  - star
   layers:
   - Default
   - TransparentFX
