@@ -28,6 +28,8 @@ public class player : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerPosition = gameObject.transform.position;
+        //別scriptでhpの数だけhpアイコンを作成
+        hpcon.createHPIcon(hp);
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -49,6 +51,7 @@ public class player : MonoBehaviour
         {
             Debug.Log("障害物に触れた！");
             hp -= 1;
+            hpcon.showHPIcon(hp);
             if (hp == 0)
             {
                 Debug.Log("dead");
@@ -56,7 +59,7 @@ public class player : MonoBehaviour
                 isGameOver = true;
                 anim.SetBool("isDead", true);
             }
-            else
+            else if(isGameOver == false)
             {
                 //障害物との接触判定OFF
                 canDetect = false;

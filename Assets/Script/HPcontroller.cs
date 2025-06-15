@@ -7,35 +7,27 @@ using UnityEngine.UI;
 public class HPcontroller : MonoBehaviour
 {
     [SerializeField, Header("HPアイコン")]
-    private GameObject playericon;
-
-    private player player;
+    private GameObject hpicon;
     private int beforeHP;
 
-    void Start()
+    public void createHPIcon(int currenthp)
     {
-        player = FindObjectOfType<player>();
-        beforeHP = player.GetHP();
-        createHPIcon();
-    }
-
-    private void createHPIcon()
-    {
-        for (int i = 0; i < player.GetHP(); i++)
+        for (int i = 0; i < currenthp; i++)
         {
-            GameObject playerHPobj = Instantiate(playericon);
+            GameObject playerHPobj = Instantiate(hpicon);
             playerHPobj.transform.parent = transform;
         }
     }
-    public void showHPIcon()
+
+    public void showHPIcon(int currenthp)
     {
-        if (beforeHP == player.GetHP()) return;
+        if (beforeHP == currenthp) return;
 
         Image[] icons = transform.GetComponentsInChildren<Image>();
         for (int i = 0; i < icons.Length; i++)
         {
-            icons[i].gameObject.SetActive(i < player.GetHP());
+            icons[i].gameObject.SetActive(i < currenthp);
         }
-        beforeHP = player.GetHP();
+        beforeHP = currenthp;
     }
 }
