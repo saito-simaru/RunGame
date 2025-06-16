@@ -7,6 +7,10 @@ public class player : MonoBehaviour
     public HPcontroller hpcon;
     public SpriteBlinker blinker;
     public scoreManagement scoreManagement;
+    public LayerMask targetLayer;
+    private Vector3 playerPosition;
+    private Rigidbody2D rb;
+    private Animator anim;
     private int MaxJumpCount = 2;
     private int jumpCount = 0;
 
@@ -14,19 +18,15 @@ public class player : MonoBehaviour
     private int hp = 3;
     [SerializeField]
     private float cooldownTime;
-    public float movespeed = 1f;
+    [SerializeField,Header("移動速度")]
+    private float movespeed = 1f;
+    [SerializeField, Header("落下速度")]
+    private float maxFallSpeed = 5;
     private float defaultMovespeed;
     public float jumpForce = 5f; // ジャンプ力
-    private Vector3 playerPosition;
-    private RaycastHit2D hit;
-    public float rayLength;
-    private Rigidbody2D rb;
     private bool isGrounded = false; // 地面に接触しているかどうかのフラグ
-    public LayerMask targetLayer;
     private bool isGameOver = false;
     private bool canDetect = true;
-    private Animator anim;
-    private Vector3 playerpos;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -36,11 +36,20 @@ public class player : MonoBehaviour
         //別scriptでhpの数だけhpアイコンを作成
         hpcon.createHPIcon(hp);
     }
+    void FixedUpdate()
+    {
+        if (rb.velocity.y < maxFallSpeed)
+        {
+            Vector3 v = rb.velocity;
+            v.y = maxFallSpeed;
+            rb.velocity = v;
+        }
+    }
 
     void Update()
     {
         //横スクロール
-        //rb.velocity = new Vector2(movespeed * Time.deltaTime, rb.velocity.y); // X方向に移動、Yはそのまま
+        // X方向に移動、Yはそのまま
         if (isGameOver == false)
         {
             gameObject.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
@@ -49,7 +58,14 @@ public class player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("stage"))
+        if (!other.gameObject.CompareTag("stage")) return;
+
+        GameObject stage = other.gameObject;
+        //stage.transform.position.y + (stage.transform.localScale.y / 2) = stageの上辺の高さ
+        //0.4 = プレイヤーの下辺より少し上
+        float criteriaOfLanding = stage.transform.position.y + (stage.transform.localScale.y / 2);
+        //プレイヤーがstageに横から触れたかを判定
+        if (criteriaOfLanding < gameObject.transform.position.y)
         {
             jumpCount = 0;
             anim.SetBool("isJumping", false);
@@ -74,11 +90,9 @@ public class player : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        //canDetect（接触可能フラグ）がtrueじゃないと実行されない
-        if (!canDetect) return;
-        
+        //canDetect（接触可能フラグ）がtrueじゃないと実行されない        
         //障害物に当たった場合
-        if (other.gameObject.CompareTag("obstacles"))
+        if (other.gameObject.CompareTag("obstacles") && canDetect == true)
         {
             Debug.Log("障害物に触れた！");
             hp -= 1;
@@ -108,7 +122,6 @@ public class player : MonoBehaviour
         hp = 0;
         hpcon.showHPIcon(hp);
         isGameOver = true;
-        ///rb.AddForce(Vector3.up * 5f, ForceMode2D.Impulse);
         rb.velocity = new Vector2(rb.velocity.x, 25);
         anim.SetBool("isDead", true);
         scoreManagement.SetResult();

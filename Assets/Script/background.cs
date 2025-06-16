@@ -43,8 +43,6 @@ public class SpriteFadeSwap : MonoBehaviour
         // 念のためαを1に
         FillspriteRenderer.color = new Color(FillColor.r, FillColor.g, FillColor.b, 1f);
 
-
-        //yield return new WaitForSeconds(duration + 2f);
         ChangeSprite();
 
         time = 0f;
@@ -63,22 +61,15 @@ public class SpriteFadeSwap : MonoBehaviour
     //背景変更
     void ChangeSprite()
     {
-        //一番奥の背景を変更
-        //[backgroundNum * 5]は各セットの先頭レイヤーをとってくるため
-        //Layer_Object[0].GetComponent<SpriteRenderer>().sprite = Layer_Sprites[backgroundNum*4];
-        //それ以外の背景を変更
         for (int i = 0; i < Layer_Object.Length; i++)
         {
             //一つのステージにつき、４枚の画像を使っているからi(ステージの番号)*4
             Sprite changeSprite = Layer_Sprites[backgroundNum * 4 + i];
-            //Change Layer_1->7
             //親背景の変更
             Layer_Object[i].GetComponent<SpriteRenderer>().sprite = changeSprite;
-            //Change "Layer_(*)x" sprites in children of Layer_1->7
             //子背景の変更
             Layer_Object[i].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = changeSprite;
             Layer_Object[i].transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = changeSprite;
-
         }
     }
 
