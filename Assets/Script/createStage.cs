@@ -37,7 +37,7 @@ public class createStage : MonoBehaviour
         renderer.sprite = groundSprite;
 
         // 例: 位置・色・サイズの設定
-        renderer.color = Color.gray;
+        //renderer.color = Color.gray;
         square.transform.position = new Vector2(0,-3.5f);
         square.transform.localScale = new Vector3(30,3,1);
 
@@ -117,7 +117,7 @@ public class createStage : MonoBehaviour
 
 
         // 例: 位置・色・サイズの設定
-        renderer.color = Color.gray;
+        //renderer.color = Color.gray;
         square.transform.position = createPosition;
         square.transform.localScale = createScale;
 
