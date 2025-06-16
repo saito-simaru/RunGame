@@ -15,8 +15,6 @@ public class SpriteFadeSwap : MonoBehaviour
     public Sprite[] Layer_Sprites;
     private GameObject[] Layer_Object = new GameObject[4];
 
-    
-    private int count = 0;
     //private int max_backgroundNum = 1;
     void Start()
     {

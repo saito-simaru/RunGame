@@ -15,7 +15,7 @@ public class HPcontroller : MonoBehaviour
         for (int i = 0; i < currenthp; i++)
         {
             GameObject playerHPobj = Instantiate(hpicon);
-            playerHPobj.transform.parent = transform;
+            playerHPobj.transform.SetParent(transform);
         }
     }
 

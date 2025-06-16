@@ -21,6 +21,8 @@ public class scoreManagement : MonoBehaviour
         // アプリ起動時にハイスコアを読み込む
         highScore = PlayerPrefs.GetInt(HIGHSCORE_KEY, 0); // キーが見つからない場合は0を返す
         Debug.Log("現在のハイスコア: " + highScore);
+        //ゲーム起動時にresultキャンパスを取得してから非表示
+        result.enabled = false;
     }
 
     void Update()
@@ -31,29 +33,28 @@ public class scoreManagement : MonoBehaviour
     }
 
     //deadzonScriptから呼び出すからpublic
-    // public void SetResult()
-    // {
-    //     Debug.Log("startResult");
-    //     setStage.enabled = false;
-    //     SaveScore(currentScore);
-    //     gameUI.enabled = false;  
-    //     result.enabled = true;
-    //     displayEndScore();
-    // }
-    // void displayEndScore()
-    // {
-    //     endScoreText.text = "Score:" + currentScore.ToString("F0");
-    //     highScoreText.text = "HighScore:" + highScore.ToString("F0");
-    // }
+    public void SetResult()
+    {
+        Debug.Log("startResult");
+        SaveScore(currentScore);
+        gameUI.enabled = false;  
+        result.enabled = true;
+        displayEndScore();
+    }
+    void displayEndScore()
+    {
+        endScoreText.text = "Score:" + currentScore.ToString("F0");
+        highScoreText.text = "HighScore:" + highScore.ToString("F0");
+    }
 
-    // void SaveScore(int newScore)
-    // {
-    //     if (newScore > highScore)
-    //     {
-    //         highScore = newScore;
-    //         PlayerPrefs.SetInt(HIGHSCORE_KEY, highScore);
-    //         PlayerPrefs.Save(); // データをディスクに書き込む（重要！）
-    //         Debug.Log("新しいハイスコアが保存されました: " + highScore);
-    //     }
-    // }
+    void SaveScore(int newScore)
+    {
+        if (newScore > highScore)
+        {
+            highScore = newScore;
+            PlayerPrefs.SetInt(HIGHSCORE_KEY, highScore);
+            PlayerPrefs.Save(); // データをディスクに書き込む（重要！）
+            Debug.Log("新しいハイスコアが保存されました: " + highScore);
+        }
+    }
 }

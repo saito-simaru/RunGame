@@ -6,9 +6,10 @@ public class player : MonoBehaviour
 {
     public HPcontroller hpcon;
     public SpriteBlinker blinker;
+    public scoreManagement scoreManagement;
     private int MaxJumpCount = 2;
     private int jumpCount = 0;
-    private int countStar = 0;
+
     [SerializeField]
     private int hp = 3;
     [SerializeField]
@@ -58,7 +59,8 @@ public class player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        
+        //gameoverフラグが立ってたら実行されない
+        if (isGameOver) return;
 
         //奈落へ落ちた場合
         if (other.gameObject.CompareTag("deadobj"))
@@ -102,11 +104,14 @@ public class player : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("dead");
-        
+
         hp = 0;
         hpcon.showHPIcon(hp);
         isGameOver = true;
+        ///rb.AddForce(Vector3.up * 5f, ForceMode2D.Impulse);
+        rb.velocity = new Vector2(rb.velocity.x, 25);
         anim.SetBool("isDead", true);
+        scoreManagement.SetResult();
     }
 
     private void ResetDetection()
