@@ -12,12 +12,14 @@ public class scoreManagement : MonoBehaviour
     public createStage setStage;
     public Canvas gameUI;
     public Canvas result;
+    public GameObject restartCon;
     private const string HIGHSCORE_KEY = "HighScore"; // 保存するデータのキー
     private int currentScore;
     private int highScore;
 
     void Start()
     {
+        restartCon.SetActive(false);
         // アプリ起動時にハイスコアを読み込む
         highScore = PlayerPrefs.GetInt(HIGHSCORE_KEY, 0); // キーが見つからない場合は0を返す
         Debug.Log("現在のハイスコア: " + highScore);
@@ -39,6 +41,7 @@ public class scoreManagement : MonoBehaviour
         SaveScore(currentScore);
         gameUI.enabled = false;  
         result.enabled = true;
+        restartCon.SetActive(true);
         displayEndScore();
     }
     void displayEndScore()
