@@ -9,6 +9,7 @@ TagManager:
   - obstacles
   - deadobj
   - star
+  - floor
   layers:
   - Default
   - TransparentFX

@@ -14,6 +14,7 @@ public class createStage : MonoBehaviour
     public int maxFloors;
     public float floorWidth;
     private float floorTopPos;
+    float skyfloorChance = 0.5f; // 5%の確率
 
     void Awake()
     {
@@ -47,8 +48,12 @@ public class createStage : MonoBehaviour
     {
         SetFloorInformation();
         CreateFloor(floorSprite);
+
+        if (Random.value < skyfloorChance)
+        {
+            createSkyFloor(floorSprite);
+        }
         
-        createSkyFloor(floorSprite);
 
         // if (isMountain == true)
         // {
@@ -89,6 +94,7 @@ public class createStage : MonoBehaviour
         {
             holeScale = 0;
         }
+        Debug.Log(holeScale);
         //最後に生成された床を取得
         GameObject lastStage = Stages[Stages.Count - 1];
         //直前に生成されたオブジェクトの右端
@@ -160,6 +166,7 @@ public class createStage : MonoBehaviour
     public void DeleteStage()
     {
         //削除するオブジェクトをリストから除外
+        Destroy(Stages[0]);
         Stages.RemoveAt(0); 
     }
 }

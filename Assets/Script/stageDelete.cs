@@ -10,7 +10,6 @@ public class stageDelete : MonoBehaviour
         if (other.gameObject.CompareTag("floor"))
         {
             createStage.DeleteStage();
-            Destroy(other.gameObject);
             createStage.CreateStage();
             Debug.Log("床がトリガーから出ました");
         }
