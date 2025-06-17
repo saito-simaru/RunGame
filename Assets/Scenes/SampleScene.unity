@@ -1309,7 +1309,7 @@ MonoBehaviour:
   scoreManagement: {fileID: 519420033}
   targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   hp: 3
   cooldownTime: 2
   movespeed: 5
