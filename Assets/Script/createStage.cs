@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class createStage : MonoBehaviour
 {
-    public Sprite groundSprite;  //Inspector にセットする用
-    private Vector2 createPosition = new Vector2(0,-3.5f);//-3.5は固定値
-    private Vector3 createScale = new Vector3(0,3,1);//y,zは固定値
+    public Sprite floorSprite;  //Inspector にセットする用
+    private Vector2 floorPosition = new Vector2(0,-3.5f);//-3.5は固定値
+    private Vector3 floorScale = new Vector3(20,3,1);//y,zは固定値
     private List<GameObject> Stages = new List<GameObject>();
     public Camera camera;
-    public float moveSpeed = 0f;
-    public float interval = 60f;
-    public int RandomScaleWidth;
-    public int maxObjects;
+    public GameObject floor;
+    public int maxFloors;
+    public float floorWidth;
+    private float floorTopPos;
 
     void Awake()
     {
@@ -20,122 +21,145 @@ public class createStage : MonoBehaviour
     }
     void Start()
     {
-        // コルーチンを開始
-        StartCoroutine(ExecutePeriodically());
+        //最初の床を作成　これがないと配列が空の状態になり、生成アルゴリズムにエラーが出る
+        GameObject obj = Instantiate(floor);
 
-        //最初だけ特別にサイズを指定して生成
-        GameObject square = new GameObject("ground");
-        SpriteRenderer renderer = square.AddComponent<SpriteRenderer>();
-        Rigidbody2D rb = square.AddComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Static; // 動かない地面用
-        square.tag = "stage";
+        obj.transform.position = floorPosition;
+        obj.transform.localScale = floorScale;
 
-        //inspecter上でstageを選択してる
-        square.layer = LayerMask.NameToLayer("stage");
-
-
-        renderer.sprite = groundSprite;
-
-        // 例: 位置・色・サイズの設定
-        //renderer.color = Color.gray;
-        square.transform.position = new Vector2(0,-3.5f);
-        square.transform.localScale = new Vector3(30,3,1);
-
-        BoxCollider2D collider = square.AddComponent<BoxCollider2D>();
-
-
-        Stages.Add(square);
-    }
-    IEnumerator ExecutePeriodically()
-    {
-        while (true) // 無限ループで繰り返し実行
+        // スプライトを上書き
+        SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
+        if (renderer != null)
         {
-            // 指定した時間だけ待機
-            yield return new WaitForSeconds(interval);
-            ChangeLevel();
-
-            // ここに60秒ごとに実行したい処理を書く
-
-            // 例: 特定の条件が満たされたらコルーチンを停止する
-            // if (GameManager.Instance.IsGameOver)
-            // {
-            //     yield break; // コルーチンを終了
-            // }
+            renderer.sprite = floorSprite;
         }
-    }
 
-    void Update()
-    {
 
-        if (Stages.Count < maxObjects)
+        Stages.Add(obj);
+
+        while (Stages.Count < maxFloors)
         {
-            SetPositionAndScale();
             CreateStage();
         }
-        else
-        {
-            DeleteStage();
-        }
+    }
+
+    public void CreateStage()
+    {
+        SetFloorInformation();
+        CreateFloor(floorSprite);
+        
+        createSkyFloor(floorSprite);
+
+        // if (isMountain == true)
+        // {
+        //     createSkyFloor();
+        //     createObstacles();
+        // }
+
+        // if (isDesert == true)
+        // {
+        //     createflyinObstacles();
+        // }
+
+        // if (isUnderground == true)
+        // {
+        //     createswayinObstacles();
+        // }
+        
+    }
+
+    int DivideAndRound(float numerator, float denominator)
+    {
+        float result = (float)numerator / denominator;
+        return Mathf.RoundToInt(result);
     }
 
     void ChangeLevel()
     {
-        RandomScaleWidth -= 5;
+        floorWidth -= 5;
+        //floorSprite = 何か;
     }
 
-    void SetPositionAndScale()
+    void SetFloorInformation()
     {
-        int stageLength = Random.Range(RandomScaleWidth - 4, RandomScaleWidth); // 1以上11未満 → 1〜10
-        createScale.x = stageLength;
         //穴の大きさ
         int holeScale = Random.Range(0, 5);
         //穴が小さすぎたら０とする
         if (holeScale == 2 || holeScale == 1)
         {
-            holeScale = 3;
+            holeScale = 0;
         }
-
+        //最後に生成された床を取得
         GameObject lastStage = Stages[Stages.Count - 1];
-        //直前に生成されたオブジェクトの端
+        //直前に生成されたオブジェクトの右端
         float endx = lastStage.transform.position.x + (lastStage.transform.localScale.x / 2);
         //生成する位置
-        createPosition.x = endx + (stageLength / 2) + holeScale;
+        floorPosition.x = endx + (floorWidth / 2) + holeScale;
     }
-
-
-    void CreateStage()
+    void CreateFloor(Sprite sprite)
     {
-        GameObject square = new GameObject("ground");
-        SpriteRenderer renderer = square.AddComponent<SpriteRenderer>();
-        Rigidbody2D rb = square.AddComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Static; // 動かない地面用
-        renderer.sprite = groundSprite;
-        square.tag = "stage";
-        
+        GameObject obj = Instantiate(floor);
 
-        square.layer = LayerMask.NameToLayer("stage");
+        obj.transform.position = floorPosition;
+        obj.transform.localScale = floorScale;
 
-
-        // 例: 位置・色・サイズの設定
-        //renderer.color = Color.gray;
-        square.transform.position = createPosition;
-        square.transform.localScale = createScale;
-
-        BoxCollider2D collider = square.AddComponent<BoxCollider2D>();
-
-        
-        Stages.Add(square);
-    }
-
-    void DeleteStage()
-    {
-        //画面から消えたら
-        if (Stages[0].transform.position.x + (Stages[0].transform.localScale.x / 2) < camera.transform.position.x - 15)
+        // スプライトを上書き
+        SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
+        if (renderer != null)
         {
-            Destroy(Stages[0]);
-            Stages.RemoveAt(0); 
+            renderer.sprite = sprite;
         }
 
+        Stages.Add(obj);
+    }
+    void createSkyFloor(Sprite sprite)
+    {
+        GameObject obj = Instantiate(floor);
+        obj.tag = "stage";
+
+        //床の横幅割る３を空中床の幅にする
+        float Width = DivideAndRound(floorWidth, 3f);
+        //0.25は固定値
+        obj.transform.localScale = new Vector2(Width, 0.25f);
+
+        //生成する空中床が床の両端の間に収まる位置を計算
+        float spawnPosx = Random.Range((floorPosition.x - floorWidth / 2) +
+        Width / 2, (floorPosition.x + floorWidth / 2) - Width / 2);
+        //2.25は固定値
+        obj.transform.position = new Vector2(spawnPosx, 2.25f);
+        
+        // スプライトを上書き
+        SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
+        if (renderer != null)
+        {
+            renderer.sprite = sprite;
+        }
     }
 
+    void createObstacles(GameObject instanceobj, Vector2 position, Vector2 size)
+    {
+        //引数のオブジェクトをインスタンス化
+        GameObject obj = Instantiate(instanceobj);
+
+        int choiceFloorOrSkyfloor = Random.Range(0, 3);
+
+        if (choiceFloorOrSkyfloor < 3)
+        {
+            
+        }
+
+        //renderer.color = Color.gray; 
+        floor.transform.position = floorPosition;
+        floor.transform.localScale = floorScale;
+
+        Stages.Add(obj);
+    }
+
+
+
+    public void DeleteStage()
+    {
+        //削除するオブジェクトをリストから除外
+        Stages.RemoveAt(0); 
+    }
 }

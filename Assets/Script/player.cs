@@ -58,18 +58,19 @@ public class player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (!other.gameObject.CompareTag("stage")) return;
-
-        GameObject stage = other.gameObject;
-        //stage.transform.position.y + (stage.transform.localScale.y / 2) = stageの上辺の高さ
-        //0.4 = プレイヤーの下辺より少し上
-        float criteriaOfLanding = stage.transform.position.y + (stage.transform.localScale.y / 2);
-        //プレイヤーがstageに横から触れたかを判定
-        if (criteriaOfLanding < gameObject.transform.position.y)
+        if (other.gameObject.CompareTag("stage") || other.gameObject.CompareTag("floor"))
         {
-            jumpCount = 0;
-            anim.SetBool("isJumping", false);
-            Debug.Log("JumpReset");
+            GameObject stage = other.gameObject;
+            //stage.transform.position.y + (stage.transform.localScale.y / 2) = stageの上辺の高さ
+            //0.4 = プレイヤーの下辺より少し上
+            float criteriaOfLanding = stage.transform.position.y + (stage.transform.localScale.y / 2);
+            //プレイヤーがstageに横から触れたかを判定
+            if (criteriaOfLanding < gameObject.transform.position.y)
+            {
+                jumpCount = 0;
+                anim.SetBool("isJumping", false);
+                Debug.Log("JumpReset");
+            }
         }
     }
 
