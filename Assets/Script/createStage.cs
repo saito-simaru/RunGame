@@ -22,11 +22,11 @@ public class createStage : MonoBehaviour
     public int createFlyinobstacleCount =2;
     public int createStarCount =3;
     private int level = 0;
-    private float floorAdditionalWidth = 0;
+    //private float floorAdditionalWidth = 0;
     private bool isDesert = false;
     //private float floorTopPos;
     float skyfloorChance = 0.5f; // 5%の確率
-    float floorScalex;
+    public float floorScalex;
 
     void Awake()
     {
@@ -34,7 +34,8 @@ public class createStage : MonoBehaviour
     }
     void Start()
     {
-        floorScalex = floor.transform.localScale.x;
+        floorScale.x = floorScalex;
+
         floorSprite = floorSprites[0];
         //最初の床を作成　これがないと配列が空の状態になり、生成アルゴリズムにエラーが出る
         GameObject obj = Instantiate(floor);
@@ -79,7 +80,7 @@ public class createStage : MonoBehaviour
     {
         level++;
         floorSprite = floorSprites[level];
-        floorAdditionalWidth -= 4;
+        floorScale.x -= 4;
         createObstacleCount++;
         isDesert = true;
         bgcon.FadeOutAndIn();
@@ -102,15 +103,14 @@ public class createStage : MonoBehaviour
         //直前に生成されたオブジェクトの右端
         float endx = lastStage.transform.position.x + (lastStage.transform.localScale.x / 2);
         //生成する位置
-        floorPosition.x = endx + (floorScalex / 2) + holeScale;
+        floorPosition.x = endx + (floorScale.x / 2) + holeScale;
     }
     void CreateFloor(Sprite sprite)
     {
         GameObject obj = Instantiate(floor);
 
         obj.transform.position = floorPosition;
-        obj.transform.localScale = floorScale - new Vector3(floorAdditionalWidth,0,0);
-
+        obj.transform.localScale = floorScale;
         // スプライトを上書き
         SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
         if (renderer != null)
@@ -129,13 +129,13 @@ public class createStage : MonoBehaviour
         obj.tag = "stage";
 
         //床の横幅割る３を空中床の幅にする
-        float Width = DivideAndRound(floorScalex, 3f);
+        float Width = DivideAndRound(floorScale.x, 3f);
         //0.25は固定値
         obj.transform.localScale = new Vector2(Width, 0.25f);
 
         //生成する空中床が床の両端の間に収まる位置を計算
-        float spawnPosx = Random.Range((floorPosition.x - floorScalex / 2) +
-        Width / 2, (floorPosition.x + floorScalex / 2) - Width / 2);
+        float spawnPosx = Random.Range((floorPosition.x - floorScale.x / 2) +
+        Width / 2, (floorPosition.x + floorScale.x / 2) - Width / 2);
         //2.25は固定値
         obj.transform.position = new Vector2(spawnPosx, 2.25f);
 
