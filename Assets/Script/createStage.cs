@@ -11,9 +11,14 @@ public class createStage : MonoBehaviour
     private List<GameObject> Stages = new List<GameObject>();
     public Camera camera;
     public GameObject floor;
+    public GameObject obstacle;
+    public GameObject flyinobstacle;
+    public GameObject star;
     public int maxFloors;
+    public int createObstacleCount = 3;
+    public int createFlyinobstacleCount =2;
     public float floorWidth;
-    private float floorTopPos;
+    //private float floorTopPos;
     float skyfloorChance = 0.5f; // 5%の確率
 
     void Awake()
@@ -117,6 +122,9 @@ public class createStage : MonoBehaviour
         }
 
         Stages.Add(obj);
+
+        createObstacles(obj,createObstacleCount);
+        createflyinObstacles(obj);
     }
     void createSkyFloor(Sprite sprite)
     {
@@ -133,32 +141,105 @@ public class createStage : MonoBehaviour
         Width / 2, (floorPosition.x + floorWidth / 2) - Width / 2);
         //2.25は固定値
         obj.transform.position = new Vector2(spawnPosx, 2.25f);
-        
+
         // スプライトを上書き
         SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
         if (renderer != null)
         {
             renderer.sprite = sprite;
         }
+
+        createObstacles(obj,createObstacleCount - 2);
     }
 
-    void createObstacles(GameObject instanceobj, Vector2 position, Vector2 size)
+    void createObstacles(GameObject floor, int createCount)
     {
-        //引数のオブジェクトをインスタンス化
-        GameObject obj = Instantiate(instanceobj);
+        // 床のスケールと位置
+        Transform floorTf = floor.transform;
+        Vector3 floorPos = floorTf.position;
+        Vector3 floorScale = floorTf.localScale;
 
-        int choiceFloorOrSkyfloor = Random.Range(0, 3);
+        // 横幅（整数）だけx座標を作る（床の中心から見て -width/2 ～ +width/2）
+        int floorWidth = Mathf.FloorToInt(floorScale.x);
+        List<float> availableXPositions = new List<float>();
 
-        if (choiceFloorOrSkyfloor < 3)
+        for (int i = -floorWidth / 2; i < floorWidth / 2; i++)
         {
-            
+            float x = floorPos.x + i + 0.5f; // 中心に乗るように+0.5
+            availableXPositions.Add(x);
         }
 
-        //renderer.color = Color.gray; 
-        floor.transform.position = floorPosition;
-        floor.transform.localScale = floorScale;
+        if (availableXPositions.Count == 0)
+        {
+            Debug.LogWarning("配置可能なx座標が存在しません");
+            return;
+        }
 
-        Stages.Add(obj);
+        // インスタンスのyスケール（仮）を取得する
+        //float objectYScale = obstacle.transform.localScale.y;
+        float floorYScale = floorScale.y;
+
+        // Y位置計算： 床の中心 + 床の高さ/2 + オブジェクト高さ/2
+        float spawnY = floorPos.y + floorYScale / 2f + 0.5f;
+
+        for (int i = 0; i < createCount; i++)
+        {
+            // ランダムに1つ選択
+            int index = Random.Range(0, availableXPositions.Count);
+            float selectedX = availableXPositions[index];
+            availableXPositions.RemoveAt(index); 
+            // 生成
+            Vector3 spawnPosition = new Vector3(selectedX, spawnY, 0f);
+            Instantiate(obstacle, spawnPosition, Quaternion.identity);   
+        }
+    }
+    void createflyinObstacles(GameObject floor)
+    {
+        // 床のスケールと位置
+        Transform floorTf = floor.transform;
+        Vector3 floorPos = floorTf.position;
+        Vector3 floorScale = floorTf.localScale;
+
+        // 横幅（整数）だけx座標を作る（床の中心から見て -width/2 ～ +width/2）
+        int floorWidth = Mathf.FloorToInt(floorScale.x);
+        List<float> availableXPositions = new List<float>();
+
+        for (int i = -floorWidth / 2; i < floorWidth / 2; i++)
+        {
+            float x = floorPos.x + i + 1f; // 中心に乗るように+0.5
+            availableXPositions.Add(x);
+        }
+
+        if (availableXPositions.Count == 0)
+        {
+            Debug.LogWarning("配置可能なx座標が存在しません");
+            return;
+        }
+
+        // インスタンスのyスケール（仮）を取得する
+        //float objectYScale = obstacle.transform.localScale.y;
+        float floorYScale = floorScale.y;
+
+        // Y位置計算： 床の中心 + 床の高さ/2 + オブジェクト高さ/2
+        float floorTopPos = floorPos.y + floorYScale / 2f + 1f;
+
+        float spawnY = Random.Range(floorTopPos, 3);
+
+        for (int i = 0; i < createFlyinobstacleCount; i++)
+        {
+            // ランダムに1つ選択
+            int index = Random.Range(0, availableXPositions.Count);
+            float selectedX = availableXPositions[index];
+            availableXPositions.RemoveAt(index);
+            // 生成
+            Vector3 spawnPosition = new Vector3(selectedX, spawnY, 0f);
+            Instantiate(flyinobstacle, spawnPosition, Quaternion.identity);
+        }
+    }
+
+    void createStar()
+    {
+        
     }
 
 
@@ -167,6 +248,6 @@ public class createStage : MonoBehaviour
     {
         //削除するオブジェクトをリストから除外
         Destroy(Stages[0]);
-        Stages.RemoveAt(0); 
+        Stages.RemoveAt(0);
     }
 }
