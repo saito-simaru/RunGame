@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class SpriteFadeSwap : MonoBehaviour
+public class background : MonoBehaviour
 {
     public SpriteRenderer FillspriteRenderer; // 対象のSpriteRenderer
     private Color FillColor;
@@ -26,10 +26,16 @@ public class SpriteFadeSwap : MonoBehaviour
         {
             Layer_Object[i] = GameObject.Find("Layer_" + i);
         }
-        StartCoroutine(FadeOutAndIn());
+
     }
 
-    IEnumerator FadeOutAndIn()
+    // public void StartChangeScene()
+    // {
+    //     StartCoroutine(FadeOutAndIn());
+    // }
+
+
+     public IEnumerator FadeOutAndIn()
     {
         float time = 0f;
         //フェードイン

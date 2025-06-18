@@ -7,6 +7,9 @@ public class player : MonoBehaviour
     public HPcontroller hpcon;
     public SpriteBlinker blinker;
     public scoreManagement scoreManagement;
+    public createStage createStage;
+    [SerializeField]
+    private GameObject fire;
     public LayerMask targetLayer;
     private Vector3 playerPosition;
     private Rigidbody2D rb;
@@ -24,6 +27,8 @@ public class player : MonoBehaviour
     private float maxFallSpeed = 5;
     private float defaultMovespeed;
     public float jumpForce = 5f; // ジャンプ力
+    private float moveCount = 0f;
+    private float currentPosx;
     private bool isGrounded = false; // 地面に接触しているかどうかのフラグ
     private bool isGameOver = false;
     private bool canDetect = true;
@@ -32,6 +37,7 @@ public class player : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerPosition = gameObject.transform.position;
+        currentPosx = playerPosition.x;
         defaultMovespeed = movespeed;
         //別scriptでhpの数だけhpアイコンを作成
         hpcon.createHPIcon(hp);
@@ -53,6 +59,14 @@ public class player : MonoBehaviour
         if (isGameOver == false)
         {
             gameObject.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
+            //fire.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
+            moveCount += gameObject.transform.position.x - currentPosx;
+            if(moveCount > 500)
+            {
+                createStage.ChangeLevel();
+                moveCount = 0;
+            }
+            currentPosx = gameObject.transform.position.x;
         }
     }
 
@@ -88,6 +102,7 @@ public class player : MonoBehaviour
         if (other.gameObject.CompareTag("star"))
         {
             movespeed += 0.5f;
+            //changesizeOfFire();
             Destroy(other.gameObject);
         }
 
@@ -99,6 +114,7 @@ public class player : MonoBehaviour
             hp -= 1;
             movespeed = defaultMovespeed;
             hpcon.showHPIcon(hp);
+            //fire.transform.localScale = new Vector3(0,0,0);
 
             if (hp == 0)
             {
@@ -119,7 +135,7 @@ public class player : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("dead");
-
+        fire.transform.localScale = new Vector3(0,0,0);
         hp = 0;
         hpcon.showHPIcon(hp);
         isGameOver = true;
@@ -133,7 +149,14 @@ public class player : MonoBehaviour
         //障害物との接触判定ON
         canDetect = true;
     }
-
+    
+    // private void changesizeOfFire()
+    // {
+    //     Vector3 currentSize = fire.transform.localScale;
+    //     Vector3 currentPos = fire.transform.position;
+    //     fire.transform.localScale = new Vector3(currentSize.x + 0.5f, currentSize.y + 0.5f, 0);
+    //     //fire.transform.position = new Vector3(currentPos.x - 0.25f, 0, 0);
+    // }
     void OnJump()
     {
         if (jumpCount < MaxJumpCount && isGameOver == false)
