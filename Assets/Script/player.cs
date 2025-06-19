@@ -24,7 +24,7 @@ public class player : MonoBehaviour
     private float cooldownTime;
     [SerializeField, Header("移動速度")]
     private float movespeed = 1f;
-    [SerializeField, Header("落下速度")]
+    [SerializeField, Header("落下速度制限")]
     private float maxFallSpeed = 5;
     private float defaultMovespeed;
     [SerializeField, Header("入力時のジャンプ力")]
@@ -69,9 +69,14 @@ public class player : MonoBehaviour
 
         }
 
-        if (isJumping == true)
+        if (isJumping == true && jumpTimeCounter > 0)
         {
-            
+            //int roopCount = 0;
+
+            rb.velocity = new Vector2(rb.velocity.x, jumpHoldForce);
+            jumpTimeCounter -= Time.deltaTime;
+            Debug.Log("ジャンプ入力中処理");
+            jumpTimeCounter -= Time.deltaTime;
         }
     }
 
@@ -178,23 +183,23 @@ public class player : MonoBehaviour
             }
         }
 
-        // ボタンを押し続けている間（フレーム毎）
-        if (context.performed && isJumping)
-        {
-            int roopCount = 0;
-            while (jumpTimeCounter > 0 && isJumping)
-            {
-                roopCount++;
-                rb.velocity = new Vector2(rb.velocity.x, jumpHoldForce);
-                jumpTimeCounter -= Time.deltaTime;
-                if (roopCount > 60)
-                {
-                    break;
-                }
-            }
-            Debug.Log("ジャンプ入力中処理" + roopCount);
+        // // ボタンを押し続けている間（フレーム毎）
+        // if (context.performed && isJumping)
+        // {
+        //     int roopCount = 0;
+        //     while (jumpTimeCounter > 0 && isJumping)
+        //     {
+        //         roopCount++;
+        //         rb.velocity = new Vector2(rb.velocity.x, jumpHoldForce);
+        //         jumpTimeCounter -= Time.deltaTime;
+        //         if (roopCount > 60)
+        //         {
+        //             break;
+        //         }
+        //     }
+        //     Debug.Log("ジャンプ入力中処理" + roopCount);
 
-        }
+        // }
 
         // ボタンを離した瞬間
         if (context.canceled)

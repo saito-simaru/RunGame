@@ -1219,9 +1219,9 @@ MonoBehaviour:
   cooldownTime: 2
   movespeed: 5
   maxFallSpeed: -15
-  jumpForce: 15
-  jumpHoldForce: 15
-  jumpHoldDuration: 0.2
+  jumpForce: 20
+  jumpHoldForce: 5
+  jumpHoldDuration: 1
 --- !u!212 &878509918
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1350,7 +1350,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 4
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
