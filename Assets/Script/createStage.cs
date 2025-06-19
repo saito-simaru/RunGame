@@ -66,6 +66,7 @@ public class createStage : MonoBehaviour
 
         if (Random.value < skyfloorChance)
         {
+            
             createSkyFloor(floorSprite);
         }
     }
@@ -78,12 +79,13 @@ public class createStage : MonoBehaviour
 
     public void ChangeLevel()
     {
+        Debug.Log("レベルアップ");
         level++;
         floorSprite = floorSprites[level];
         floorScale.x -= 4;
         createObstacleCount++;
         isDesert = true;
-        bgcon.FadeOutAndIn();
+        StartCoroutine(bgcon.FadeOutAndIn());
         //floorSprite = 何か;
     }
 
@@ -97,7 +99,7 @@ public class createStage : MonoBehaviour
         {
             holeScale = 0;
         }
-        Debug.Log(holeScale);
+        
         //最後に生成された床を取得
         GameObject lastStage = Stages[Stages.Count - 1];
         //直前に生成されたオブジェクトの右端
@@ -121,6 +123,9 @@ public class createStage : MonoBehaviour
         Stages.Add(obj);
 
         createObstacles(obj,createObstacleCount);
+
+        if (!isDesert) return;
+
         createflyinObj(obj);
     }
     void createSkyFloor(Sprite sprite)
@@ -132,6 +137,7 @@ public class createStage : MonoBehaviour
         float Width = DivideAndRound(floorScale.x, 3f);
         //0.25は固定値
         obj.transform.localScale = new Vector2(Width, 0.25f);
+        
 
         //生成する空中床が床の両端の間に収まる位置を計算
         float spawnPosx = Random.Range((floorPosition.x - floorScale.x / 2) +
@@ -224,10 +230,6 @@ public class createStage : MonoBehaviour
 
         float spawnY = Random.Range(floorTopPos, 3);
 
-
-
-        if (!isDesert) return;
-
         for (int i = 0; i < createFlyinobstacleCount; i++)
         {
             createFlyinobstacle(availableXPositions,spawnY);
@@ -247,6 +249,7 @@ public class createStage : MonoBehaviour
     }
     void createFlyinobstacle(List<float> availableXPositions, float spawnY)
     {
+        Debug.Log("空トゲを生成");
         // ランダムに1つ選択
         int index = Random.Range(0, availableXPositions.Count);
         float selectedX = availableXPositions[index];

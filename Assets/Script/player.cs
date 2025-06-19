@@ -29,6 +29,8 @@ public class player : MonoBehaviour
     public float jumpForce = 5f; // ジャンプ力
     private float moveCount = 0f;
     private float currentPosx;
+    [SerializeField,Header("レベルアップする距離")]
+    private float distanceToIncreaseDifficulty;
     private bool isGrounded = false; // 地面に接触しているかどうかのフラグ
     private bool isGameOver = false;
     private bool canDetect = true;
@@ -61,11 +63,14 @@ public class player : MonoBehaviour
             gameObject.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
             //fire.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
             moveCount += gameObject.transform.position.x - currentPosx;
-            if(moveCount > 500)
+            
+            if (moveCount > distanceToIncreaseDifficulty)
             {
+                Debug.Log("レベルアップPlayer");
                 createStage.ChangeLevel();
                 moveCount = 0;
             }
+            Debug.Log(moveCount);
             currentPosx = gameObject.transform.position.x;
         }
     }

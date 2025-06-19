@@ -67,6 +67,7 @@ public class background : MonoBehaviour
     //背景変更
     void ChangeSprite()
     {
+        backgroundNum++; 
         for (int i = 0; i < Layer_Object.Length; i++)
         {
             //一つのステージにつき、４枚の画像を使っているからi(ステージの番号)*4
