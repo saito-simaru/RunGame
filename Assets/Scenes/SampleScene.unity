@@ -1219,9 +1219,9 @@ MonoBehaviour:
   cooldownTime: 2
   movespeed: 5
   maxFallSpeed: -15
-  jumpForce: 20
-  jumpHoldForce: 5
-  jumpHoldDuration: 1
+  jumpForce: 7
+  jumpHoldForce: 10
+  jumpHoldDuration: 0.5
 --- !u!212 &878509918
 SpriteRenderer:
   m_ObjectHideFlags: 0
