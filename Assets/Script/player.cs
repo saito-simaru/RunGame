@@ -22,12 +22,12 @@ public class player : MonoBehaviour
     private int hp = 3;
     [SerializeField]
     private float cooldownTime;
-    [SerializeField,Header("移動速度")]
+    [SerializeField, Header("移動速度")]
     private float movespeed = 1f;
     [SerializeField, Header("落下速度")]
     private float maxFallSpeed = 5;
     private float defaultMovespeed;
-    [SerializeField,Header("入力時のジャンプ力")]
+    [SerializeField, Header("入力時のジャンプ力")]
     public float jumpForce = 5f; // ジャンプ力
     [SerializeField, Header("入力中のジャンプ力")]
     private float jumpHoldForce = 5f;
@@ -67,6 +67,11 @@ public class player : MonoBehaviour
             gameObject.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
             //fire.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
 
+        }
+
+        if (isJumping == true)
+        {
+            
         }
     }
 
@@ -134,7 +139,7 @@ public class player : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("dead");
-        fire.transform.localScale = new Vector3(0,0,0);
+        fire.transform.localScale = new Vector3(0, 0, 0);
         hp = 0;
         hpcon.showHPIcon(hp);
         isGameOver = true;
@@ -148,7 +153,7 @@ public class player : MonoBehaviour
         //障害物との接触判定ON
         canDetect = true;
     }
-    
+
     // private void changesizeOfFire()
     // {
     //     Vector3 currentSize = fire.transform.localScale;
@@ -198,4 +203,5 @@ public class player : MonoBehaviour
             isJumping = false;
         }
     }
+    
 }
