@@ -7,8 +7,11 @@ public class createStage : MonoBehaviour
 {
     [SerializeField]
     private Sprite[] floorSprites;  //Inspector にセットする用
+    [SerializeField,Header("レベルアップする距離")]
+    private float distanceToIncreaseDifficulty;
     private Sprite floorSprite;
-    private Vector2 floorPosition = new Vector2(0,-3.5f);//-3.5は固定値
+    public GameObject player;
+    private Vector2 floorPosition = new Vector2(0, -3.5f);//-3.5は固定値
     private Vector3 floorScale = new Vector3(20,3,1);//y,zは固定値
     private List<GameObject> Stages = new List<GameObject>();
     public Camera camera;
@@ -27,13 +30,33 @@ public class createStage : MonoBehaviour
     //private float floorTopPos;
     float skyfloorChance = 0.5f; // 5%の確率
     public float floorScalex;
+    private float moveCount = 0f;
+    private float rightBeforePlyaerPosx;
+
 
     void Awake()
     {
         Application.targetFrameRate = 60;
     }
+    //Playerの移動距離によって難易度を変化
+    void Update()
+    {
+        moveCount += player.transform.position.x - rightBeforePlyaerPosx;
+        
+        if (moveCount > distanceToIncreaseDifficulty)
+        {
+            Debug.Log("レベルアップPlayer");
+            //床のスプライトアルゴリズムに合わせている
+            distanceToIncreaseDifficulty += distanceToIncreaseDifficulty;
+            ChangeLevel();
+        }
+        Debug.Log(moveCount);
+        rightBeforePlyaerPosx = player.transform.position.x;
+    }
     void Start()
     {
+        rightBeforePlyaerPosx = player.transform.position.x;
+
         floorScale.x = floorScalex;
 
         floorSprite = floorSprites[0];
@@ -81,7 +104,7 @@ public class createStage : MonoBehaviour
     {
         Debug.Log("レベルアップ");
         level++;
-        floorSprite = floorSprites[level];
+        
         floorScale.x -= 4;
         createObstacleCount++;
         isDesert = true;
@@ -99,13 +122,20 @@ public class createStage : MonoBehaviour
         {
             holeScale = 0;
         }
-        
+
         //最後に生成された床を取得
         GameObject lastStage = Stages[Stages.Count - 1];
         //直前に生成されたオブジェクトの右端
         float endx = lastStage.transform.position.x + (lastStage.transform.localScale.x / 2);
         //生成する位置
         floorPosition.x = endx + (floorScale.x / 2) + holeScale;
+
+        //床の生成範囲がレベルアップする距離を超えていたらスプライトを次のステージ用に変更
+        if (distanceToIncreaseDifficulty < endx + floorScale.x + holeScale)
+        {
+            floorSprite = floorSprites[level + 1];
+        }
+            
     }
     void CreateFloor(Sprite sprite)
     {

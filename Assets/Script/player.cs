@@ -27,10 +27,6 @@ public class player : MonoBehaviour
     private float maxFallSpeed = 5;
     private float defaultMovespeed;
     public float jumpForce = 5f; // ジャンプ力
-    private float moveCount = 0f;
-    private float currentPosx;
-    [SerializeField,Header("レベルアップする距離")]
-    private float distanceToIncreaseDifficulty;
     private bool isGrounded = false; // 地面に接触しているかどうかのフラグ
     private bool isGameOver = false;
     private bool canDetect = true;
@@ -39,7 +35,6 @@ public class player : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerPosition = gameObject.transform.position;
-        currentPosx = playerPosition.x;
         defaultMovespeed = movespeed;
         //別scriptでhpの数だけhpアイコンを作成
         hpcon.createHPIcon(hp);
@@ -62,16 +57,7 @@ public class player : MonoBehaviour
         {
             gameObject.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
             //fire.transform.position += new Vector3(movespeed * Time.deltaTime, 0f, 0f);
-            moveCount += gameObject.transform.position.x - currentPosx;
-            
-            if (moveCount > distanceToIncreaseDifficulty)
-            {
-                Debug.Log("レベルアップPlayer");
-                createStage.ChangeLevel();
-                moveCount = 0;
-            }
-            Debug.Log(moveCount);
-            currentPosx = gameObject.transform.position.x;
+
         }
     }
 
@@ -88,7 +74,6 @@ public class player : MonoBehaviour
             {
                 jumpCount = 0;
                 anim.SetBool("isJumping", false);
-                Debug.Log("JumpReset");
             }
         }
     }
