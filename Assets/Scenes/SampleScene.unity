@@ -157,16 +157,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6954bb198ba419e40a274fb25bb4936c, type: 3}
   - {fileID: 21300000, guid: 6bdf840097d9fd74a95db48c40f2c287, type: 3}
   - {fileID: 21300000, guid: b65a48dd31b113b42a4f3d72f2e7ae49, type: 3}
+  distanceToIncreaseDifficulty: 100
+  player: {fileID: 878509916}
   camera: {fileID: 519420031}
   floor: {fileID: 3587397423019661247, guid: 71e928c175daad34ca09420317504da2, type: 3}
   obstacle: {fileID: 8534165354136378598, guid: d57398c4555fbc541ac8a809ed5dc7a0, type: 3}
   flyinobstacle: {fileID: 5118004153725700764, guid: 65011b6378ea4bc4f852a2407254df0f, type: 3}
   star: {fileID: 8223973467639107232, guid: 7795f41c3bd724f439dce9308e4e1c93, type: 3}
   bgcon: {fileID: 1725267245}
-  maxFloors: 8
+  maxFloors: 3
   createObstacleCount: 3
   createFlyinobstacleCount: 2
   createStarCount: 3
+  floorScalex: 40
 --- !u!4 &212299351
 Transform:
   m_ObjectHideFlags: 0
@@ -2739,7 +2742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FillspriteRenderer: {fileID: 1820818224}
   duration: 3
-  backgroundNum: 1
+  backgroundNum: 0
   Layer_Sprites:
   - {fileID: 21300000, guid: ab01f61b3c6a46c4587ab9734c601f5a, type: 3}
   - {fileID: 21300000, guid: 151eef41825813d4f96dd0d4c8ecdc2f, type: 3}
