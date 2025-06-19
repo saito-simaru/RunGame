@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class player : MonoBehaviour
 {
@@ -26,7 +27,15 @@ public class player : MonoBehaviour
     [SerializeField, Header("落下速度")]
     private float maxFallSpeed = 5;
     private float defaultMovespeed;
+    [SerializeField,Header("入力時のジャンプ力")]
     public float jumpForce = 5f; // ジャンプ力
+    [SerializeField, Header("入力中のジャンプ力")]
+    private float jumpHoldForce = 5f;
+    [SerializeField, Header("最大ジャンプ入力時間")]
+    private float jumpHoldDuration = 0.2f;
+    private bool isJumping;
+    private float jumpTimeCounter;
+
     private bool isGrounded = false; // 地面に接触しているかどうかのフラグ
     private bool isGameOver = false;
     private bool canDetect = true;
@@ -147,15 +156,46 @@ public class player : MonoBehaviour
     //     fire.transform.localScale = new Vector3(currentSize.x + 0.5f, currentSize.y + 0.5f, 0);
     //     //fire.transform.position = new Vector3(currentPos.x - 0.25f, 0, 0);
     // }
-    void OnJump()
+    public void OnJump(InputAction.CallbackContext context)
     {
-        if (jumpCount < MaxJumpCount && isGameOver == false)
+        // ボタンが押された瞬間
+        if (context.started)
         {
-            //ジャンプ数をカウント
-            jumpCount++;
-            // ジャンプ力を適用
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            anim.SetBool("isJumping", true);
+            Debug.Log("ジャンプ入力時");
+            if (jumpCount < MaxJumpCount && !isGameOver)
+            {
+                Debug.Log("ジャンプ入力時処理");
+                jumpCount++;
+                isJumping = true;
+                jumpTimeCounter = jumpHoldDuration;
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                anim.SetBool("isJumping", true);
+            }
+        }
+
+        // ボタンを押し続けている間（フレーム毎）
+        if (context.performed && isJumping)
+        {
+            int roopCount = 0;
+            while (jumpTimeCounter > 0 && isJumping)
+            {
+                roopCount++;
+                rb.velocity = new Vector2(rb.velocity.x, jumpHoldForce);
+                jumpTimeCounter -= Time.deltaTime;
+                if (roopCount > 60)
+                {
+                    break;
+                }
+            }
+            Debug.Log("ジャンプ入力中処理" + roopCount);
+
+        }
+
+        // ボタンを離した瞬間
+        if (context.canceled)
+        {
+            Debug.Log("ジャンプ入力後処理");
+            isJumping = false;
         }
     }
 }

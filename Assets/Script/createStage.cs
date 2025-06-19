@@ -50,7 +50,7 @@ public class createStage : MonoBehaviour
             distanceToIncreaseDifficulty += distanceToIncreaseDifficulty;
             ChangeLevel();
         }
-        Debug.Log(moveCount);
+
         rightBeforePlyaerPosx = player.transform.position.x;
     }
     void Start()
