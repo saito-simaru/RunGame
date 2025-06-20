@@ -19,11 +19,11 @@ public class CallMovinObstacle : MonoBehaviour
         Debug.Log("お化け開始");
         while (true)
         {
-            CallmovinObstacle();
-
             // ランダムな待ち時間（例：1秒〜3秒）
             float waitTime = Random.Range(5f, 10f);
             yield return new WaitForSeconds(waitTime);
+                
+            CallmovinObstacle();
         }
     }
 

@@ -27,7 +27,7 @@ public class createStage : MonoBehaviour
     public int createStarCount =3;
     private int level = 0;
     //private float floorAdditionalWidth = 0;
-    private bool isDesert = false;
+    private bool canSpawnFlyingObstacle = false;
     //private float floorTopPos;
     float skyfloorChance = 0.5f; // 5%の確率
     public float floorScalex;
@@ -105,19 +105,36 @@ public class createStage : MonoBehaviour
 
     public void ChangeLevel()
     {
-        Debug.Log("レベルアップ");
-        level++;
         
-        floorScale.x -= 4;
+        level++;
+        Debug.Log("レベルアップ" + level);
+
+        //floorScale.x -= 4;
         //createObstacleCount++;
 
-        //お化けを管理しているscriptを起動
-        StartCoroutine(callMovinObstacle.CallmovinObstacleLoop());
-
-        isDesert = true;
-        
+        //背景の変更
         StartCoroutine(bgcon.FadeOutAndIn());
-        //floorSprite = 何か;
+        
+        switch (level)
+        {
+            case 1:
+                Debug.Log("レベル２");
+                    canSpawnFlyingObstacle = true;
+                break;
+
+            case 2:
+
+                break;
+
+            case 3:
+                //お化けを管理しているscriptを起動
+                Debug.Log("4");
+                StartCoroutine(callMovinObstacle.CallmovinObstacleLoop());
+                break;
+
+            default:
+                break;
+        }
     }
 
     void SetFloorInformation(GameObject floor)
@@ -162,7 +179,7 @@ public class createStage : MonoBehaviour
 
         createObstacles(obj,createObstacleCount);
 
-        if (!isDesert) return;
+        if (!canSpawnFlyingObstacle) return;
 
         createflyinObj(obj);
     }
@@ -261,15 +278,16 @@ public class createStage : MonoBehaviour
             return;
         }
 
-        float floorYScale = floorScale.y;
 
-        // Y位置計算： 床の中心 + 床の高さ/2 + オブジェクト高さ/2
-        float floorTopPos = floorPos.y + floorYScale / 2f + 1f;
-
-        float spawnY = Random.Range(floorTopPos, 3);
 
         for (int i = 0; i < createFlyinobstacleCount; i++)
         {
+            float floorYScale = floorScale.y;
+
+            // Y位置計算： 床の中心 + 床の高さ/2 + オブジェクト高さ/2
+            float floorTopPos = floorPos.y + floorYScale / 2f + 1f;
+
+            float spawnY = Random.Range(floorTopPos, 3);
             createFlyinobstacle(availableXPositions,spawnY);
         }
         
