@@ -11,12 +11,12 @@ public class stageDelete : MonoBehaviour
         {
             createStage.DeleteStage();
             createStage.CreateStage();
-            Debug.Log("床がトリガーから出ました");
+
         }
         else
         {
             Destroy(other.gameObject);
-            Debug.Log("トリガーから出ました");
+
         }
         
 

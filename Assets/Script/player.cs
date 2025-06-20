@@ -171,10 +171,10 @@ public class player : MonoBehaviour
         // ボタンが押された瞬間
         if (context.started)
         {
-            Debug.Log("ジャンプ入力時");
+            
             if (jumpCount < MaxJumpCount && !isGameOver)
             {
-                Debug.Log("ジャンプ入力時処理");
+                
                 jumpCount++;
                 isJumping = true;
                 jumpTimeCounter = jumpHoldDuration;
@@ -204,7 +204,7 @@ public class player : MonoBehaviour
         // ボタンを離した瞬間
         if (context.canceled)
         {
-            Debug.Log("ジャンプ入力後処理");
+            
             isJumping = false;
         }
     }

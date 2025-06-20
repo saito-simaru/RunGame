@@ -20,6 +20,7 @@ public class createStage : MonoBehaviour
     public GameObject flyinobstacle;
     public GameObject star;
     public background bgcon;
+    public CallMovinObstacle callMovinObstacle;
     public int maxFloors;
     public int createObstacleCount = 3;
     public int createFlyinobstacleCount =2;
@@ -55,6 +56,8 @@ public class createStage : MonoBehaviour
     }
     void Start()
     {
+
+
         rightBeforePlyaerPosx = player.transform.position.x;
 
         floorScale.x = floorScalex;
@@ -106,8 +109,13 @@ public class createStage : MonoBehaviour
         level++;
         
         floorScale.x -= 4;
-        createObstacleCount++;
+        //createObstacleCount++;
+
+        //お化けを管理しているscriptを起動
+        StartCoroutine(callMovinObstacle.CallmovinObstacleLoop());
+
         isDesert = true;
+        
         StartCoroutine(bgcon.FadeOutAndIn());
         //floorSprite = 何か;
     }
