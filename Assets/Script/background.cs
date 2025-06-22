@@ -12,6 +12,8 @@ public class background : MonoBehaviour
 
     [Header("BackgroundNum 0 -> 3")]
     public int backgroundNum;
+    [Header("背景枚数")]
+    public int max_backgroundNum;
     public Sprite[] Layer_Sprites;
     private GameObject[] Layer_Object = new GameObject[4];
 
@@ -68,6 +70,7 @@ public class background : MonoBehaviour
     void ChangeSprite()
     {
         backgroundNum++; 
+        if (backgroundNum > max_backgroundNum) backgroundNum = 0;
         for (int i = 0; i < Layer_Object.Length; i++)
         {
             //一つのステージにつき、４枚の画像を使っているからi(ステージの番号)*4

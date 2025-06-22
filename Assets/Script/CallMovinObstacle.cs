@@ -8,6 +8,7 @@ public class CallMovinObstacle : MonoBehaviour
     public GameObject movinObstacle;
     public GameObject player;
     private float spawnPosx;
+    private bool isrooping = true;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class CallMovinObstacle : MonoBehaviour
     public IEnumerator CallmovinObstacleLoop()
     {
         Debug.Log("お化け開始");
-        while (true)
+        while (isrooping == true)
         {
             // ランダムな待ち時間（例：1秒〜3秒）
             float waitTime = Random.Range(5f, 10f);
@@ -25,6 +26,11 @@ public class CallMovinObstacle : MonoBehaviour
                 
             CallmovinObstacle();
         }
+    }
+
+    public void StopMovinObstacle()
+    {
+        isrooping = false;
     }
 
     private void CallmovinObstacle()
@@ -35,8 +41,8 @@ public class CallMovinObstacle : MonoBehaviour
         // ランダムな値を生成
         float upperY = Random.Range(3f, 6f);
         float lowerY = Random.Range(-1.5f, upperY - 2f); // 上限より下の値にしておく
-        float Yspeed = Random.Range(3f, 10f);
-        float Xspeed = Random.Range(0.05f, 0.1f);
+        float Yspeed = Random.Range(2f, 5f);
+        float Xspeed = Random.Range(0.02f, 0.05f);
 
         // インスタンス化
         GameObject newObstacle = Instantiate(movinObstacle, new Vector3(spawnPosx, lowerY, 0), Quaternion.identity);

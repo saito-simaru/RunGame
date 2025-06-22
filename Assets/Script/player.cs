@@ -9,8 +9,8 @@ public class player : MonoBehaviour
     public SpriteBlinker blinker;
     public scoreManagement scoreManagement;
     public createStage createStage;
-    [SerializeField]
-    private GameObject fire;
+    public CallMovinObstacle callMovinObstacle;
+    public ParticleSystem particleSystem; // Inspectorで設定する or GetComponentで取得
     public LayerMask targetLayer;
     private Vector3 playerPosition;
     private Rigidbody2D rb;
@@ -24,6 +24,8 @@ public class player : MonoBehaviour
     private float cooldownTime;
     [SerializeField, Header("移動速度")]
     private float movespeed = 1f;
+    [SerializeField, Header("最高速度")]
+    private float maxSpeed = 12;
     [SerializeField, Header("落下速度制限")]
     private float maxFallSpeed = 5;
     private float defaultMovespeed;
@@ -41,6 +43,7 @@ public class player : MonoBehaviour
     private bool canDetect = true;
     void Start()
     {
+        particleSystem.Stop();
         anim = GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerPosition = gameObject.transform.position;
@@ -110,9 +113,20 @@ public class player : MonoBehaviour
         //スターに触れた場合
         if (other.gameObject.CompareTag("star"))
         {
-            movespeed += 0.5f;
+            if (movespeed < maxSpeed)
+            {
+                movespeed += 0.5f;
+            }
+            if (movespeed == maxSpeed)
+            {
+                particleSystem.Play();
+            }
+            else
+            {
+                particleSystem.Stop();
+            }
             //changesizeOfFire();
-            Destroy(other.gameObject);
+                Destroy(other.gameObject);
         }
 
         //canDetect（接触可能フラグ）がtrueじゃないと実行されない        
@@ -144,7 +158,9 @@ public class player : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("dead");
-        fire.transform.localScale = new Vector3(0, 0, 0);
+        //fire.transform.localScale = new Vector3(0, 0, 0);
+        //お化けの生成を止める
+        callMovinObstacle.StopMovinObstacle();
         hp = 0;
         hpcon.showHPIcon(hp);
         isGameOver = true;

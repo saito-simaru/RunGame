@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class restartManager : MonoBehaviour
 {
-    void OnClick()
+    public void Restart()
     {
         // 1. 現在アクティブなシーンの名前を取得する
         string currentSceneName = SceneManager.GetActiveScene().name;

@@ -25,7 +25,7 @@ public class createStage : MonoBehaviour
     public int createObstacleCount = 3;
     public int createFlyinobstacleCount =2;
     public int createStarCount =3;
-    private int level = 0;
+    private int level = 1;
     //private float floorAdditionalWidth = 0;
     private bool canSpawnFlyingObstacle = false;
     //private float floorTopPos;
@@ -105,8 +105,9 @@ public class createStage : MonoBehaviour
 
     public void ChangeLevel()
     {
-        
+
         level++;
+
         Debug.Log("レベルアップ" + level);
 
         //floorScale.x -= 4;
@@ -114,19 +115,19 @@ public class createStage : MonoBehaviour
 
         //背景の変更
         StartCoroutine(bgcon.FadeOutAndIn());
-        
+
         switch (level)
         {
-            case 1:
-                Debug.Log("レベル２");
-                    canSpawnFlyingObstacle = true;
-                break;
-
             case 2:
-
+                Debug.Log("レベル２");
+                canSpawnFlyingObstacle = true;
                 break;
 
             case 3:
+
+                break;
+
+            case 4:
                 //お化けを管理しているscriptを起動
                 Debug.Log("4");
                 StartCoroutine(callMovinObstacle.CallmovinObstacleLoop());
@@ -135,6 +136,7 @@ public class createStage : MonoBehaviour
             default:
                 break;
         }
+        if (level == 4) level = 0;
     }
 
     void SetFloorInformation(GameObject floor)
@@ -154,11 +156,12 @@ public class createStage : MonoBehaviour
         float endx = lastStage.transform.position.x + (lastStage.transform.localScale.x / 2);
         //生成する位置
         floorPosition.x = endx + (floorScale.x / 2) + holeScale;
-
+        
+        
         //床の生成範囲がレベルアップする距離を超えていたらスプライトを次のステージ用に変更
         if (distanceToIncreaseDifficulty < endx + floorScale.x + holeScale)
         {
-            floorSprite = floorSprites[level + 1];
+            floorSprite = floorSprites[level];
         }
             
     }
