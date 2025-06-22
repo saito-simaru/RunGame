@@ -13,4 +13,10 @@ public class restartManager : MonoBehaviour
         // 2. そのシーンをロードし直す
         SceneManager.LoadScene(currentSceneName);
     }
+
+    public string sceneName; // 遷移先シーン名をInspectorで指定
+    public void ChangeScene()
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 }
