@@ -158,6 +158,7 @@ public class player : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("dead");
+        particleSystem.Stop();
         //fire.transform.localScale = new Vector3(0, 0, 0);
         //お化けの生成を止める
         callMovinObstacle.StopMovinObstacle();

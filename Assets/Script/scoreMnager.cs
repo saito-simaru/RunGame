@@ -31,7 +31,7 @@ public class scoreManagement : MonoBehaviour
     {
         currentScore = (int)player.transform.position.x;
         //カメラの座標がそのままスコア  F0で小数点なし
-        currentScoreText.text = "Score:" + currentScore.ToString("F0");
+        currentScoreText.text = "走行距離:" + currentScore.ToString("F0");
     }
 
     //deadzonScriptから呼び出すからpublic
@@ -46,8 +46,8 @@ public class scoreManagement : MonoBehaviour
     }
     void displayEndScore()
     {
-        endScoreText.text = "Score:" + currentScore.ToString("F0");
-        highScoreText.text = "HighScore:" + highScore.ToString("F0");
+        endScoreText.text = "走行距離:" + currentScore.ToString("F0");
+        highScoreText.text = "ハイスコア:" + highScore.ToString("F0");
     }
 
     void SaveScore(int newScore)
