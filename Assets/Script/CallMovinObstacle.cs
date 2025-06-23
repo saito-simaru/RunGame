@@ -41,8 +41,8 @@ public class CallMovinObstacle : MonoBehaviour
         // ランダムな値を生成
         float upperY = Random.Range(3f, 6f);
         float lowerY = Random.Range(-1.5f, upperY - 2f); // 上限より下の値にしておく
-        float Yspeed = Random.Range(2f, 5f);
-        float Xspeed = Random.Range(0.02f, 0.05f);
+        float Yspeed = Random.Range(3f, 5f);
+        float Xspeed = Random.Range(0.01f, 0.03f);
 
         // インスタンス化
         GameObject newObstacle = Instantiate(movinObstacle, new Vector3(spawnPosx, lowerY, 0), Quaternion.identity);

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class player : MonoBehaviour
 {
     public HPcontroller hpcon;
+    public SoundCon soundCon;
     public SpriteBlinker blinker;
     public scoreManagement scoreManagement;
     public createStage createStage;
@@ -116,6 +117,7 @@ public class player : MonoBehaviour
             if (movespeed < maxSpeed)
             {
                 movespeed += 0.5f;
+                soundCon.PlaySound("star");
             }
             if (movespeed == maxSpeed)
             {
@@ -134,6 +136,7 @@ public class player : MonoBehaviour
         if (other.gameObject.CompareTag("obstacles") && canDetect == true)
         {
             Debug.Log("障害物に触れた！");
+            soundCon.PlaySound("damage");
             hp -= 1;
             movespeed = defaultMovespeed;
             hpcon.showHPIcon(hp);
@@ -191,7 +194,7 @@ public class player : MonoBehaviour
             
             if (jumpCount < MaxJumpCount && !isGameOver)
             {
-                
+                soundCon.PlaySound("jump");
                 jumpCount++;
                 isJumping = true;
                 jumpTimeCounter = jumpHoldDuration;
