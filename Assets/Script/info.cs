@@ -19,8 +19,11 @@ public class info : MonoBehaviour
     private int currentIndex;
     private int notActive = -2;
     private int Active = 2;
+    private SoundCon soundCon;
+
     void Start()
     {
+        soundCon = FindObjectOfType<SoundCon>();
         canvas.sortingOrder = notActive;
         imageRenderer.sortingOrder = notActive - 1;
 
@@ -37,12 +40,14 @@ public class info : MonoBehaviour
 
     public void startInfo()
     {
+        soundCon.PlaySound("tap");
         canvas.sortingOrder = Active;
         imageRenderer.sortingOrder = Active - 1;
     }
 
     public void endInfo()
     {
+        soundCon.PlaySound("tap");
         canvas.sortingOrder = notActive;
         imageRenderer.sortingOrder = notActive - 1;
         imageRenderer.sprite = sprites[0];
@@ -54,6 +59,7 @@ public class info : MonoBehaviour
     {
         if (currentIndex < 3)
         {
+            soundCon.PlaySound("tap");
             currentIndex += 1;
             imageRenderer.sprite = sprites[currentIndex];
             text.text = strings[currentIndex];
@@ -69,6 +75,7 @@ public class info : MonoBehaviour
     {
         if (currentIndex != 0)
         {
+            soundCon.PlaySound("tap");
             currentIndex -= 1;
             imageRenderer.sprite = sprites[currentIndex];
             text.text = strings[currentIndex];

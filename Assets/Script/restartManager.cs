@@ -5,8 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class restartManager : MonoBehaviour
 {
+    private SoundCon soundCon;
+
+    void Start()
+    {
+        soundCon = FindObjectOfType<SoundCon>();
+    }
     public void Restart()
     {
+        soundCon.PlaySound("tap");
         // 1. 現在アクティブなシーンの名前を取得する
         string currentSceneName = SceneManager.GetActiveScene().name;
 
@@ -17,6 +24,7 @@ public class restartManager : MonoBehaviour
     public string sceneName; // 遷移先シーン名をInspectorで指定
     public void ChangeScene()
     {
+        soundCon.PlaySound("tap");
         SceneManager.LoadScene(sceneName);
     }
 }

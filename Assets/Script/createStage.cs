@@ -7,8 +7,10 @@ public class createStage : MonoBehaviour
 {
     [SerializeField]
     private Sprite[] floorSprites;  //Inspector にセットする用
-    [SerializeField,Header("レベルアップする距離")]
+    [SerializeField, Header("レベルアップする距離")]
     private float distanceToIncreaseDifficulty;
+    [SerializeField, Header("１レベルのステージ距離")]
+    private float distanceToFirstlevel;
     private Sprite floorSprite;
     public GameObject player;
     private Vector2 floorPosition = new Vector2(0, -3.5f);//-3.5は固定値
@@ -44,11 +46,11 @@ public class createStage : MonoBehaviour
     {
         moveCount += player.transform.position.x - rightBeforePlyaerPosx;
         
-        if (moveCount > distanceToIncreaseDifficulty)
+        if (moveCount > distanceToFirstlevel)
         {
             Debug.Log("レベルアップPlayer");
             //床のスプライトアルゴリズムに合わせている
-            distanceToIncreaseDifficulty += distanceToIncreaseDifficulty;
+            distanceToFirstlevel += distanceToIncreaseDifficulty;
             ChangeLevel();
         }
 
@@ -118,6 +120,12 @@ public class createStage : MonoBehaviour
 
         switch (level)
         {
+            case 1:
+                createObstacleCount++;
+                createFlyinobstacleCount++;
+                createStarCount++;
+                Debug.Log("二週目");
+                break;
             case 2:
                 Debug.Log("レベル２");
                 canSpawnFlyingObstacle = true;
@@ -159,7 +167,7 @@ public class createStage : MonoBehaviour
         
         
         //床の生成範囲がレベルアップする距離を超えていたらスプライトを次のステージ用に変更
-        if (distanceToIncreaseDifficulty < endx + floorScale.x + holeScale)
+        if (distanceToFirstlevel < endx + floorScale.x + holeScale)
         {
             floorSprite = floorSprites[level];
         }
@@ -210,7 +218,7 @@ public class createStage : MonoBehaviour
             renderer.sprite = sprite;
         }
 
-        createObstacles(obj,createObstacleCount - 2);
+        createObstacles(obj,createObstacleCount - 1);
     }
 
     void createObstacles(GameObject floor, int createCount)

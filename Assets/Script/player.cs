@@ -122,6 +122,7 @@ public class player : MonoBehaviour
             if (movespeed == maxSpeed)
             {
                 particleSystem.Play();
+                soundCon.PlaySound("speed");
             }
             else
             {
@@ -194,7 +195,8 @@ public class player : MonoBehaviour
             
             if (jumpCount < MaxJumpCount && !isGameOver)
             {
-                soundCon.PlaySound("jump");
+                if(jumpCount == 0)  soundCon.PlaySound("jump");
+                else  soundCon.PlaySound("secondjump");
                 jumpCount++;
                 isJumping = true;
                 jumpTimeCounter = jumpHoldDuration;
