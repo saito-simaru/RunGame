@@ -202,6 +202,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movinObstacle: {fileID: 6791300001090754582, guid: 3c1cd15c019c4744daa313578bd85279, type: 3}
   player: {fileID: 878509916}
+--- !u!1 &239716844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 239716846}
+  - component: {fileID: 239716845}
+  m_Layer: 0
+  m_Name: FPS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &239716845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239716844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 517fae1ee7e91004f836f15b92a381c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &239716846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239716844}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.861876, y: 2.8935747, z: 0.0004618913}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &265060841
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,19 +1245,7 @@ MonoBehaviour:
     m_ActionId: e7bc5922-09a9-4049-986d-6b2cea0b72ce
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 878509917}
-        m_TargetAssemblyTypeName: player, Assembly-CSharp
-        m_MethodName: OnJump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 1da0057c-8f82-400e-b37e-1c8e4a06cc03
     m_ActionName: Player/Jump[/Mouse/leftButton]
   - m_PersistentCalls:
@@ -8786,3 +8818,4 @@ SceneRoots:
   - {fileID: 212299351}
   - {fileID: 976241060}
   - {fileID: 1717355951}
+  - {fileID: 239716846}

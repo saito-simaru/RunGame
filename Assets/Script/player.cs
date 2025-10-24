@@ -64,6 +64,18 @@ public class player : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("space");
+            OnJump();
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            Debug.Log("UPspacce");
+            Outjump();
+        }
+
+
         //横スクロール
         // X方向に移動、Yはそのまま
         if (isGameOver == false)
@@ -187,16 +199,18 @@ public class player : MonoBehaviour
     //     fire.transform.localScale = new Vector3(currentSize.x + 0.5f, currentSize.y + 0.5f, 0);
     //     //fire.transform.position = new Vector3(currentPos.x - 0.25f, 0, 0);
     // }
-    public void OnJump(InputAction.CallbackContext context)
+    public void OnJump()
     {
+        Debug.Log("ジャンプ前");
         // ボタンが押された瞬間
-        if (context.started)
+        if (true)
         {
-            
+
             if (jumpCount < MaxJumpCount && !isGameOver)
             {
-                if(jumpCount == 0)  soundCon.PlaySound("jump");
-                else  soundCon.PlaySound("secondjump");
+                Debug.Log("ジャンプtyuu ");
+                if (jumpCount == 0) soundCon.PlaySound("jump");
+                else soundCon.PlaySound("secondjump");
                 jumpCount++;
                 isJumping = true;
                 jumpTimeCounter = jumpHoldDuration;
@@ -224,7 +238,11 @@ public class player : MonoBehaviour
         // }
 
         // ボタンを離した瞬間
-        if (context.canceled)
+
+    }
+    void Outjump()
+    {
+        if (true)
         {
             
             isJumping = false;

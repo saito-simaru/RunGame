@@ -27,7 +27,7 @@ public class info : MonoBehaviour
         canvas.sortingOrder = notActive;
         imageRenderer.sortingOrder = notActive - 1;
 
-        strings[0] = "これがあなた。画面をクリックするとジャンプできます。";
+        strings[0] = "これがあなた。スペースキーを押すとジャンプできます。";
         strings[1] = "これがHPです。HPが0になるとゲームオーバーとなります。";
         strings[2] = "ここにスコアが表示されます。";
         strings[3] = "星をとるとスピードアップ！";
